@@ -11,25 +11,42 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# Flutter Steganograph
 
-## Features
+***
+Flutter Steganograph is a digital image encoding package. it simply takes a message (text or image)
+and embeds (conceal 🕵️‍♂️) it inside of a `cover image` with minimum possible alteration to the original 
+`cover image`.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Installation 🛸
 
-## Getting started
+Add `steganograph` to your `pubspec.yaml`:
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+```yaml
+dependencies:
+  flutter_steganograph: ^0.0.1
+```
 
-## Usage
+## Usage 📦
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Importing the Package
 
 ```dart
-const like = 'sample';
+import 'package:flutter_steganograph/flutter_steganograph.dart';
+```
+
+## Embed a text into an image
+
+```dart
+//Embeds a text string into an image.
+//Optional `saveImage` argument to download embedded image to gallery.
+final steganography = Steganography();
+final embeddedTextImage = steganography.embedText(
+    image: Image.asset('/my_picture.png'), 
+    text: 'super secret text',
+    saveImage: true
+    );
+
 ```
 
 ## Additional information
