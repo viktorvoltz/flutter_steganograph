@@ -8,6 +8,12 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 class Steganograph {
+  /// Embeds the given [text] into the [image].
+  ///
+  /// The [saveImage] parameter is optional. If set to `true`, the image with
+  /// embedded text will be downloaded to gallery.
+  ///
+  /// Returns the modified image with the embedded text.
   Image embedText(Image image, String text, {bool? saveImage}) {
     int x = 0;
     int y = 0;
@@ -36,6 +42,9 @@ class Steganograph {
     return image;
   }
 
+  /// Extracts and returns the text of the given [length] of text from the [image].
+  ///
+  /// Returns the extracted secret text.
   String extractText(Image image, int length) {
     int totalBits = length * 8;
     int bitIndex = 0;
@@ -61,6 +70,14 @@ class Steganograph {
     return String.fromCharCodes(chars);
   }
 
+  /// Embeds the [secretImage] into the [coverImage].
+  ///
+  /// The [saveImage] parameter is optional. If set to `true`, the image with
+  /// the embedded secret image will be saved.
+  ///
+  /// Returns the modified cover image with the embedded secret image.
+  ///
+  /// Throws a [GeneralException] if the secret image dimensions exceed the cover image dimensions.
   Image embedImage(Image coverImage, Image secretImage, {bool? saveImage}) {
     secretImage = _resizeSecretImageIfNecessary(coverImage, secretImage);
     int coverWidth = coverImage.width;
@@ -105,18 +122,23 @@ class Steganograph {
     return coverImage;
   }
 
-  Image extractImage(Image stegoImage, int secretWidth, int secretHeight,
+  /// Extracts the secret image from the [embeddedImage] with the given [secretWidth] and [secretHeight].
+  ///
+  /// The [saveImage] parameter is optional. If set to `true`, the extracted image will be saved.
+  ///
+  /// Returns the extracted secret image.
+  Image extractImage(Image embeddedImage, int secretWidth, int secretHeight,
       {bool? saveImage}) {
     Image extractedImage = Image(width: secretWidth, height: secretHeight);
 
     for (int y = 0; y < secretHeight; y++) {
       for (int x = 0; x < secretWidth; x++) {
-        Color stegoPixel = stegoImage.getPixel(x, y);
+        Color embeddedPixel = embeddedImage.getPixel(x, y);
 
-        int extractedRed = ((stegoPixel.r as int) & 0x0F) << 4;
-        int extractedGreen = ((stegoPixel.g as int) & 0x0F) << 4;
-        int extractedBlue = ((stegoPixel.b as int) & 0x0F) << 4;
-        int extractedAlpha = ((stegoPixel.a as int) & 0x0F) << 4;
+        int extractedRed = ((embeddedPixel.r as int) & 0x0F) << 4;
+        int extractedGreen = ((embeddedPixel.g as int) & 0x0F) << 4;
+        int extractedBlue = ((embeddedPixel.b as int) & 0x0F) << 4;
+        int extractedAlpha = ((embeddedPixel.a as int) & 0x0F) << 4;
 
         Color extractedPixel = ColorInt8.rgba(
             extractedRed, extractedGreen, extractedBlue, extractedAlpha);
@@ -161,7 +183,7 @@ class Steganograph {
     try {
       DateTime now = DateTime.now();
       String timestamp =
-          now.toIso8601String().replaceAll(':', '').replaceAll('.', '');
+          now.toIso8601String().replaceAll(RegExp(r'[:.]'), '');
       final fileName = "$prefix-$timestamp.png";
       final directory = await getApplicationDocumentsDirectory();
       final filePath = path.join(directory.path, fileName);
@@ -169,7 +191,7 @@ class Steganograph {
       file.writeAsBytesSync(encodePng(image, level: 1));
       await Gal.putImage(file.path);
     } catch (e, s) {
-      DownloadException(errorMessage: e.toString(), stackTrace: s);
+      throw DownloadException(errorMessage: e.toString(), stackTrace: s);
     }
   }
 }
