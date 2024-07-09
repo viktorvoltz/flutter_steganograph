@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:flutter_steganograph/src/custom_exception.dart';
 import 'package:gal/gal.dart';
 import 'package:image/image.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_steganograph/src/custom_exception.dart';
 
 class Steganograph {
   /// Embeds the given [text] into the [image].
@@ -73,7 +73,7 @@ class Steganograph {
   /// Embeds the [secretImage] into the [coverImage].
   ///
   /// The [saveImage] parameter is optional. If set to `true`, the image with
-  /// the embedded secret image will be saved.
+  /// the embedded secret image will be downloaded to gallery.
   ///
   /// Returns the modified cover image with the embedded secret image.
   ///
@@ -124,7 +124,7 @@ class Steganograph {
 
   /// Extracts the secret image from the [embeddedImage] with the given [secretWidth] and [secretHeight].
   ///
-  /// The [saveImage] parameter is optional. If set to `true`, the extracted image will be saved.
+  /// The [saveImage] parameter is optional. If set to `true`, the extracted image will be downloaded to gallery.
   ///
   /// Returns the extracted secret image.
   Image extractImage(Image embeddedImage, int secretWidth, int secretHeight,
@@ -159,7 +159,7 @@ class Steganograph {
     Color modifiedColor = ColorFloat32.rgb(red, pixel.g, pixel.b);
     image.setPixel(x, y, modifiedColor);
   }
-
+  
   Image _resizeSecretImageIfNecessary(Image coverImage, Image secretImage) {
     int coverCapacity = coverImage.width * coverImage.height;
     int secretSize = secretImage.width * secretImage.height;
