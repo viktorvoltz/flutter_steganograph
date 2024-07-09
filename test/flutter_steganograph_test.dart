@@ -52,25 +52,6 @@ void main() {
     }
   });
 
-    // test('resizeSecretImageIfNecessary', () {
-    //   final largeSecretImage = Image(width: 200, height: 200);
-    //   fillImage(largeSecretImage, getRandomColor());
-
-    //   final resizedImage = steganograph._resizeSecretImageIfNecessary(coverImage, largeSecretImage);
-
-    //   expect(resizedImage.width <= coverImage.width, true);
-    //   expect(resizedImage.height <= coverImage.height, true);
-    // });
-
-    // test('saveImage', () async {
-    //   final fileNamePrefix = "testImage";
-    //   await steganograph._saveImage(coverImage, fileNamePrefix);
-
-    //   final directory = await getApplicationDocumentsDirectory();
-    //   final files = directory.listSync().where((f) => f.path.contains(fileNamePrefix));
-
-    //   expect(files.isNotEmpty, true);
-    // });
   });
 }
 
@@ -80,10 +61,6 @@ void fillImage(Image image, Color color) {
       image.setPixel(x, y, color);
     }
   }
-}
-
-Future<Image> mockSaveImage(Image image, String prefix) async {
-  return Image.from(image);
 }
 
 Color getRandomColor() {
