@@ -1,18 +1,20 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:flutter_steganograph/src/custom_exception.dart';
 import 'package:gal/gal.dart';
 import 'package:image/image.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-class Steganography {
+class Steganograph {
   Image embedText(Image image, String text, {bool? saveImage}) {
     int x = 0;
     int y = 0;
+    int textLength = text.length;
     int bitMask = 0x80;
 
-    for (int i = 0; i < text.length; i++) {
+    for (int i = 0; i < textLength; i++) {
       int charValue = text.codeUnitAt(i);
 
       for (int j = 0; j < 8; j++) {
@@ -67,29 +69,35 @@ class Steganography {
     int secretHeight = secretImage.height;
 
     if (secretWidth > coverWidth || secretHeight > coverHeight) {
-      throw Exception('Secret image dimensions exceed cover image dimensions');
+      throw GeneralException(
+        errorMessage: 'Secret image dimensions exceeds cover image dimensions',
+      );
     }
 
-    for (int y = 0; y < secretHeight; y++) {
-      for (int x = 0; x < secretWidth; x++) {
-        Color coverPixel = coverImage.getPixel(x, y);
-        Color secretPixel = secretImage.getPixel(x, y);
+    try {
+      for (int y = 0; y < secretHeight; y++) {
+        for (int x = 0; x < secretWidth; x++) {
+          Color coverPixel = coverImage.getPixel(x, y);
+          Color secretPixel = secretImage.getPixel(x, y);
 
-        int secretRed = (secretPixel.r as int) >> 4;
-        int secretGreen = (secretPixel.g as int) >> 4;
-        int secretBlue = (secretPixel.b as int) >> 4;
-        int secretAlpha = (secretPixel.a as int) >> 4;
+          int secretRed = (secretPixel.r as int) >> 4;
+          int secretGreen = (secretPixel.g as int) >> 4;
+          int secretBlue = (secretPixel.b as int) >> 4;
+          int secretAlpha = (secretPixel.a as int) >> 4;
 
-        int coverRed = ((coverPixel.r as int) & 0xF0) | secretRed;
-        int coverGreen = ((coverPixel.g as int) & 0xF0) | secretGreen;
-        int coverBlue = ((coverPixel.b as int) & 0xF0) | secretBlue;
-        int coverAlpha = ((coverPixel.a as int) & 0xF0) | secretAlpha;
+          int coverRed = ((coverPixel.r as int) & 0xF0) | secretRed;
+          int coverGreen = ((coverPixel.g as int) & 0xF0) | secretGreen;
+          int coverBlue = ((coverPixel.b as int) & 0xF0) | secretBlue;
+          int coverAlpha = ((coverPixel.a as int) & 0xF0) | secretAlpha;
 
-        Color newPixel =
-            ColorInt8.rgba(coverRed, coverGreen, coverBlue, coverAlpha);
+          Color newPixel =
+              ColorInt8.rgba(coverRed, coverGreen, coverBlue, coverAlpha);
 
-        coverImage.setPixel(x, y, newPixel);
+          coverImage.setPixel(x, y, newPixel);
+        }
       }
+    } catch (e, s) {
+      throw SizeException(errorMessage: e.toString(), stackTrace: s);
     }
     if (saveImage == true) {
       _saveImage(coverImage, "embeddedImage");
@@ -97,7 +105,7 @@ class Steganography {
     return coverImage;
   }
 
-  Uint8List extractImage(Image stegoImage, int secretWidth, int secretHeight,
+  Image extractImage(Image stegoImage, int secretWidth, int secretHeight,
       {bool? saveImage}) {
     Image extractedImage = Image(width: secretWidth, height: secretHeight);
 
@@ -120,7 +128,7 @@ class Steganography {
       _saveImage(extractedImage, "extractedImage");
     }
 
-    return encodePng(extractedImage);
+    return extractedImage;
   }
 
   void _embedBit(Image image, int x, int y, int bitValue) {
@@ -150,15 +158,18 @@ class Steganography {
   }
 
   Future<void> _saveImage(Image image, String prefix) async {
-    DateTime now = DateTime.now();
-    String timestamp =
-        now.toIso8601String().replaceAll(':', '').replaceAll('.', '');
-    final fileName = "$prefix-$timestamp.png";
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = path.join(directory.path, fileName);
-    final file = File(filePath);
-    file.writeAsBytesSync(encodePng(image, level: 1));
-    await Gal.putImage(file.path);
-    print('Image saved: $filePath');
+    try {
+      DateTime now = DateTime.now();
+      String timestamp =
+          now.toIso8601String().replaceAll(':', '').replaceAll('.', '');
+      final fileName = "$prefix-$timestamp.png";
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = path.join(directory.path, fileName);
+      final file = File(filePath);
+      file.writeAsBytesSync(encodePng(image, level: 1));
+      await Gal.putImage(file.path);
+    } catch (e, s) {
+      DownloadException(errorMessage: e.toString(), stackTrace: s);
+    }
   }
 }
