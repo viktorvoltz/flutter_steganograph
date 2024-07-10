@@ -1,7 +1,7 @@
 name: flutter_steganograph
 description: "A digital image cryptology package; steganograph."
 version: 0.0.1
-homepage:
+homepage: https://github.com/viktorvoltz/flutter_steganograph
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
