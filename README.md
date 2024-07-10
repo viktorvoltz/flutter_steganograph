@@ -35,16 +35,40 @@ Importing the Package
 import 'package:flutter_steganograph/flutter_steganograph.dart';
 ```
 
-## Embed a text into an image
+## Embed a text into an image 🔩
 
 ```dart
 //Embeds a text string into an image.
 //Optional `saveImage` argument to download embedded image to gallery.
+//Returns the encoded bytes -> `Uint8List`.
+import 'package:image/image.dart' as dImage;
+
 final steganography = Steganography();
+final coverImage = dImage.decodePng(File('/cover_image.png').readAsBytesSync())!;
+
 final embeddedTextImage = steganography.embedText(
-    image: Image.asset('/my_picture.png'), 
+    image: coverImage, 
     text: 'super secret text',
     saveImage: true
+    );
+// to covert to material image
+Image.memory(embeddedTextImage)
+```
+
+## Extract a secret text from the encoded image 🔬
+
+```dart
+//Extracts a secret text string from an encoded image.
+//Returns the extracted secret String
+import 'package:image/image.dart' as dImage;
+
+final steganography = Steganography();
+final encodedImage = dImage.decodePng(File('/encodedImage.png').readAsBytesSync())!;
+int secretLength = secretText.length;
+
+final secretText = steganography.extractText(
+    image: encodedImage, 
+    length: secretLength,
     );
 
 ```
