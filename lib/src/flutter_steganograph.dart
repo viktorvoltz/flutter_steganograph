@@ -189,8 +189,6 @@ class Steganograph {
       int newHeight = (secretImage.height * scaleFactor).toInt();
       Image resizedSecretImage =
           copyResize(secretImage, width: newWidth, height: newHeight);
-      print(
-          "Resized secret image to fit within cover image: ${newWidth}x${newHeight}");
       return resizedSecretImage;
     } else {
       return secretImage;
