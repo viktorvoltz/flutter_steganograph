@@ -27,6 +27,32 @@ class DownloadException extends CustomException {
       'DownloadException(errorMessage: $errorMessage, stackTrace: $stackTrace)';
 }
 
+class EmbedException extends CustomException {
+  String errorMessage;
+  StackTrace stackTrace;
+  EmbedException({
+    required this.errorMessage,
+    required this.stackTrace,
+  });
+
+  @override
+  String toString() =>
+      'EmbedException(errorMessage: $errorMessage, stackTrace: $stackTrace)';
+}
+
+class ExtractException extends CustomException {
+  String errorMessage;
+  StackTrace stackTrace;
+  ExtractException({
+    required this.errorMessage,
+    required this.stackTrace,
+  });
+
+  @override
+  String toString() =>
+      'ExtractException(errorMessage: $errorMessage, stackTrace: $stackTrace)';
+}
+
 class GeneralException extends CustomException {
   String errorMessage;
   StackTrace? stackTrace;
