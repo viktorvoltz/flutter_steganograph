@@ -15,12 +15,11 @@ and the Flutter guide for
 
 ***
 Flutter Steganograph is a digital image encoding package. it simply takes a message (text or image)
-and embeds (conceal 🕵️‍♂️) it inside of a `cover image` with minimum possible alteration to the original 
-`cover image`.
+and embeds (conceals 🕵️‍♂️) it inside of a `cover image` with minimum possible alteration to the original `cover image`.
 
 ## Installation 🛸
 
-Add `steganograph` to your `pubspec.yaml`:
+Add `flutter_steganograph` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -42,17 +41,18 @@ import 'package:flutter_steganograph/flutter_steganograph.dart';
 //Optional `saveImage` argument to download embedded image to gallery.
 //Returns the encoded bytes -> `Uint8List`.
 import 'package:image/image.dart' as dImage;
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
-final steganography = Steganography();
+final steganograph = Steganograph();
 final coverImage = dImage.decodePng(File('/cover_image.png').readAsBytesSync())!;
 
-final embeddedTextImage = steganography.embedText(
+final embeddedTextImage = steganograph.embedText(
     image: coverImage, 
     text: 'super secret text',
     saveImage: true
     );
 // to covert to material image
-Image.memory(embeddedTextImage)
+Image.memory(embeddedTextImage);
 ```
 
 ## Extract a secret text from the encoded image 🔬
@@ -61,20 +61,66 @@ Image.memory(embeddedTextImage)
 //Extracts a secret text string from an encoded image.
 //Returns the extracted secret String
 import 'package:image/image.dart' as dImage;
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
-final steganography = Steganography();
-final encodedImage = dImage.decodePng(File('/encodedImage.png').readAsBytesSync())!;
+final steganograph = Steganograph();
+final encodedImage = dImage.decodePng(File('/encoded_image.png').readAsBytesSync())!;
 int secretLength = secretText.length;
 
-final secretText = steganography.extractText(
+String secretText = steganograph.extractText(
     image: encodedImage, 
     length: secretLength,
     );
 
 ```
 
-## Additional information
+## Embed a secret Image inside a cover image 🖼️
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+//Embed/encode a secret image inside a cover image.
+//secret image dimensions are smaller than cover image dimensions.
+//Returns the embedded bytes -> `Uint8List` of encoded image.
+import 'package:image/image.dart' as dImage;
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
+
+final steganograph = Steganograph();
+final coverImage = dImage.decodePng(File('/cover_image.png').readAsBytesSync())!;
+final secretImage = dImage.decodePng(File('/secret_image.png').readAsBytesSync())!;
+
+Uint8List embeddedImage = steganograph.embedImage(
+        coverImage: coverImage,
+        secretImage: secretImage,
+      );
+//to covert to material image
+Image.memory(embeddedImage);
+```
+
+## Extract secret Image from an encoded image 🧮
+
+```dart
+//decode a secret image from the encoded image.
+//Returns the embedded bytes -> `Uint8List` of secret image.
+import 'package:image/image.dart' as dImage;
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
+
+final steganograph = Steganograph();
+final encodedImage = dImage.decodePng(File('/encodedImage_image.png').readAsBytesSync())!;
+int secretImageHeight;
+int secretImageWith;
+
+Uint8List extractedImage = steganograph.extractImage(
+        embeddedImage: encodedImage!,
+        secretWidth: secretImageHeight,
+        secretHeight: secretImageHeight,
+      );
+//to covert to material image
+Image.memory(extractedImage);
+```
+
+
+## Coming soon
+encryption 🔒 of secret text and image
+
+## Contribution
+Feel free to open pull requests that improve the quality of images or performance of the library.
+Any bugs should be submitted to Issues
