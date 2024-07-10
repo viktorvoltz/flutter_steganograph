@@ -36,10 +36,10 @@ import 'package:flutter_steganograph/flutter_steganograph.dart';
 
 ## Embed a text into an image 🔩
 
+Embeds a text string into an image.
+Optional `saveImage` argument to download embedded image to gallery.
+Returns the encoded bytes -> `Uint8List`.
 ```dart
-//Embeds a text string into an image.
-//Optional `saveImage` argument to download embedded image to gallery.
-//Returns the encoded bytes -> `Uint8List`.
 import 'package:image/image.dart' as dImage;
 import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
@@ -57,9 +57,9 @@ Image.memory(embeddedTextImage);
 
 ## Extract a secret text from the encoded image 🔬
 
+Extracts a secret text string from an encoded image.
+Returns the extracted secret String
 ```dart
-//Extracts a secret text string from an encoded image.
-//Returns the extracted secret String
 import 'package:image/image.dart' as dImage;
 import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
@@ -76,10 +76,10 @@ String secretText = steganograph.extractText(
 
 ## Embed a secret Image inside a cover image 🖼️
 
+Embed/encode a secret image inside a cover image.
+secret image dimensions are smaller than cover image dimensions.
+Returns the embedded bytes -> `Uint8List` of encoded image.
 ```dart
-//Embed/encode a secret image inside a cover image.
-//secret image dimensions are smaller than cover image dimensions.
-//Returns the embedded bytes -> `Uint8List` of encoded image.
 import 'package:image/image.dart' as dImage;
 import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
@@ -97,9 +97,9 @@ Image.memory(embeddedImage);
 
 ## Extract secret Image from an encoded image 🧮
 
+decode a secret image from the encoded image.
+Returns the embedded bytes -> `Uint8List` of secret image.
 ```dart
-//decode a secret image from the encoded image.
-//Returns the embedded bytes -> `Uint8List` of secret image.
 import 'package:image/image.dart' as dImage;
 import 'package:flutter_steganograph/src/flutter_steganograph.dart';
 
