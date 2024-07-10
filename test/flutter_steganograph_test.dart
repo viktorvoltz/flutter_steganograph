@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+// ignore: library_prefixes
 import 'package:image/image.dart' as dImage;
 import 'dart:math';
 
