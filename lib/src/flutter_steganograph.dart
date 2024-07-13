@@ -13,15 +13,13 @@ class Steganograph {
   /// The [saveImage] parameter is optional. If set to `true`, the image with
   /// embedded text will be downloaded to gallery.
   ///
-  /// Returns the modified image with the embedded text.
+  /// Returns the modified byte image with the embedded text.
   Uint8List embedText(
       {required Image image, required String text, bool? saveImage}) {
     int x = 0;
     int y = 0;
     int textLength = text.length;
     int bitMask = 0x80;
-
-    
 
     for (int i = 0; i < textLength; i++) {
       int charValue = text.codeUnitAt(i);
@@ -54,20 +52,24 @@ class Steganograph {
     List<int> chars = List.filled(length, 0);
     int charValue = 0;
 
-    for (int i = 0; i < totalBits; i++) {
-      int x = bitIndex % image.width;
-      int y = bitIndex ~/ image.width;
+    try {
+      for (int i = 0; i < totalBits; i++) {
+        int x = bitIndex % image.width;
+        int y = bitIndex ~/ image.width;
 
-      Color pixel = image.getPixel(x, y);
-      int lsb = (pixel.r as int) & 0x01;
-      charValue = (charValue << 1) | lsb;
+        Color pixel = image.getPixel(x, y);
+        int lsb = (pixel.r as int) & 0x01;
+        charValue = (charValue << 1) | lsb;
 
-      if ((i + 1) % 8 == 0) {
-        chars[bitIndex ~/ 8] = charValue;
-        charValue = 0;
+        if ((i + 1) % 8 == 0) {
+          chars[bitIndex ~/ 8] = charValue;
+          charValue = 0;
+        }
+
+        bitIndex++;
       }
-
-      bitIndex++;
+    } catch (e, s) {
+      throw ExtractException(errorMessage: e.toString(), stackTrace: s);
     }
 
     return String.fromCharCodes(chars);
@@ -78,7 +80,7 @@ class Steganograph {
   /// The [saveImage] parameter is optional. If set to `true`, the image with
   /// the embedded secret image will be downloaded to gallery.
   ///
-  /// Returns the modified cover image with the embedded secret image.
+  /// Returns the modified cover byte image with the embedded secret image.
   ///
   /// Throws a [GeneralException] if the secret image dimensions exceed the cover image dimensions.
   Uint8List embedImage({
@@ -133,7 +135,7 @@ class Steganograph {
   ///
   /// The [saveImage] parameter is optional. If set to `true`, the extracted image will be downloaded to gallery.
   ///
-  /// Returns the extracted secret image.
+  /// Returns the extracted secret byte image.
   Uint8List extractImage({
     required Image embeddedImage,
     required int secretWidth,
