@@ -13,7 +13,7 @@ class Steganograph {
   /// The [saveImage] parameter is optional. If set to `true`, the image with
   /// embedded text will be downloaded to gallery.
   ///
-  /// Returns the modified image with the embedded text.
+  /// Returns the modified byte image with the embedded text.
   Uint8List embedText(
       {required Image image, required String text, bool? saveImage}) {
     int x = 0;
@@ -78,7 +78,7 @@ class Steganograph {
   /// The [saveImage] parameter is optional. If set to `true`, the image with
   /// the embedded secret image will be downloaded to gallery.
   ///
-  /// Returns the modified cover image with the embedded secret image.
+  /// Returns the modified cover byte image with the embedded secret image.
   ///
   /// Throws a [GeneralException] if the secret image dimensions exceed the cover image dimensions.
   Uint8List embedImage({
@@ -133,7 +133,7 @@ class Steganograph {
   ///
   /// The [saveImage] parameter is optional. If set to `true`, the extracted image will be downloaded to gallery.
   ///
-  /// Returns the extracted secret image.
+  /// Returns the extracted secret byte image.
   Uint8List extractImage({
     required Image embeddedImage,
     required int secretWidth,
