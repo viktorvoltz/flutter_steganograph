@@ -21,8 +21,6 @@ class Steganograph {
     int textLength = text.length;
     int bitMask = 0x80;
 
-    
-
     for (int i = 0; i < textLength; i++) {
       int charValue = text.codeUnitAt(i);
 
@@ -54,20 +52,24 @@ class Steganograph {
     List<int> chars = List.filled(length, 0);
     int charValue = 0;
 
-    for (int i = 0; i < totalBits; i++) {
-      int x = bitIndex % image.width;
-      int y = bitIndex ~/ image.width;
+    try {
+      for (int i = 0; i < totalBits; i++) {
+        int x = bitIndex % image.width;
+        int y = bitIndex ~/ image.width;
 
-      Color pixel = image.getPixel(x, y);
-      int lsb = (pixel.r as int) & 0x01;
-      charValue = (charValue << 1) | lsb;
+        Color pixel = image.getPixel(x, y);
+        int lsb = (pixel.r as int) & 0x01;
+        charValue = (charValue << 1) | lsb;
 
-      if ((i + 1) % 8 == 0) {
-        chars[bitIndex ~/ 8] = charValue;
-        charValue = 0;
+        if ((i + 1) % 8 == 0) {
+          chars[bitIndex ~/ 8] = charValue;
+          charValue = 0;
+        }
+
+        bitIndex++;
       }
-
-      bitIndex++;
+    } catch (e, s) {
+      throw ExtractException(errorMessage: e.toString(), stackTrace: s);
     }
 
     return String.fromCharCodes(chars);
