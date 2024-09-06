@@ -14,8 +14,7 @@ and the Flutter guide for
 # Flutter Steganograph
 
 ***
-Flutter Steganograph is a digital image encoding package. it simply takes a message (text or image)
-and embeds (conceals 🕵️‍♂️) it inside of a `cover image` with minimum possible alteration to the original `cover image`.
+Flutter Steganograph is a digital image encoding package that embeds a message (text or image) into a cover image using the least significant bit (LSB) technique with minimal alteration to the original cover image.
 
 ## Installation 🛸
 
