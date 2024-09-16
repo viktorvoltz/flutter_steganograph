@@ -1,3 +1,3 @@
-## 0.0.1
+## 0.1.1
 
-* TODO: Describe initial release.
+* Adds new feature provided by `embedTextInText` and `extractTextFromText` methods.
