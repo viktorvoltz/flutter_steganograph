@@ -1,6 +1,6 @@
 name: flutter_steganograph
 description: "A package that embeds a message (text or image) into a (cover image/text) using the least significant bit (LSB) & Zero-width techniques with minimal alteration to the original cover image or text."
-version: 0.0.1
+version: 0.1.1
 homepage: https://github.com/viktorvoltz/flutter_steganograph
 
 environment:
