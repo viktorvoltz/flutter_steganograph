@@ -23,6 +23,27 @@ void main() {
       fillImage(secretImage, getRandomColor());
     });
 
+    test('Embed and extract secret message successfully', () {
+      String coverText = "This is a cover text.";
+      String secretMessage = "This is a much longer secret message than the cover text.";
+
+      String embeddedText = steganograph.embedTextInText(coverText, secretMessage);
+
+      expect(embeddedText, isNot(equals(coverText)));
+
+      String extractedMessage = steganograph.extractTextFromText(embeddedText);
+
+      expect(extractedMessage, equals(secretMessage));
+    });
+
+    test('Extract should fail if no secret message is present', () {
+      String coverTextWithoutSecret = "This is just a normal text.";
+
+      String result = steganograph.extractTextFromText(coverTextWithoutSecret);
+
+      expect(result, equals("No secret message found!"));
+    });
+
     test('embedText and extractText', () {
       const text = "viktorvoltz!";
       final imageWithText =
