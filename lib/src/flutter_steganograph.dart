@@ -5,9 +5,47 @@ import 'package:gal/gal.dart';
 import 'package:image/image.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_steganograph/src/binary_util.dart';
 import 'package:flutter_steganograph/src/custom_exception.dart';
 
 class Steganograph {
+  /// Embeds a secret text inside a cover text using zero-width characters.
+  ///
+  /// This function converts the secret text into a binary format, where '0' is represented 
+  /// by a zero-width space (`\u200B`) and '1' is represented by a zero-width non-joiner (`\u200C`).
+  ///
+  /// Returns a string with the secret message embedded, invisible to normal readers.
+  String embedTextInText(String coverText, String secretMessage) {
+    String binaryMessage = BinaryOperator.textToBinary(secretMessage);
+
+    String encodedMessage =
+        binaryMessage.replaceAll('0', '\u200B').replaceAll('1', '\u200C');
+
+    return '$coverText\u200D$encodedMessage';
+  }
+
+  /// Extracts a text message embedded in a text using zero-width characters.
+  ///
+  /// This function identifies the zero-width joiner (`\u200D`) used as a delimiter between the cover text
+  /// and the embedded secret message.
+  ///
+  /// Returns the extracted secret message. If no secret message is found, returns a message indicating this.
+  String extractTextFromText(String encodedText) {
+    int delimiterIndex = encodedText.indexOf('\u200D');
+
+    if (delimiterIndex == -1) {
+      return "No secret message found!";
+    }
+
+    String encodedMessage = encodedText.substring(delimiterIndex + 1);
+
+    String binaryMessage =
+        encodedMessage.replaceAll('\u200B', '0').replaceAll('\u200C', '1');
+
+    final secretMessage = BinaryOperator.binaryToText(binaryMessage);
+    return secretMessage;
+  }
+
   /// Embeds the given [text] into the [image].
   ///
   /// The [saveImage] parameter is optional. If set to `true`, the image with
