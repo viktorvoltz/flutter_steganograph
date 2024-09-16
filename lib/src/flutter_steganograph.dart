@@ -15,7 +15,7 @@ class Steganograph {
   /// by a zero-width space (`\u200B`) and '1' is represented by a zero-width non-joiner (`\u200C`).
   ///
   /// Returns a string with the secret message embedded, invisible to normal readers.
-  String embedTextInText(String coverText, String secretMessage) {
+  String embedTextInText({required String coverText, required String secretMessage}) {
     String binaryMessage = BinaryOperator.textToBinary(secretMessage);
 
     String encodedMessage =
@@ -30,7 +30,7 @@ class Steganograph {
   /// and the embedded secret message.
   ///
   /// Returns the extracted secret message. If no secret message is found, returns a message indicating this.
-  String extractTextFromText(String encodedText) {
+  String extractTextFromText({required String encodedText}) {
     int delimiterIndex = encodedText.indexOf('\u200D');
 
     if (delimiterIndex == -1) {
