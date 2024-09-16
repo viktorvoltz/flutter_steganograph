@@ -22,7 +22,7 @@ Add `flutter_steganograph` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_steganograph: ^0.1.1
+  flutter_steganograph: ^0.1.0
 ```
 
 ## Usage 📦
