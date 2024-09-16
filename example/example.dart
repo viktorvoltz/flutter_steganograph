@@ -10,6 +10,17 @@ void main() async {
   String path1 = "example/assets/plant1.png";
   String path2 = "example/assets/plant2.png";
 
+  String coverText = "This is a cover text.";
+  String secretMessage = "Hello, secret!";
+
+  // Embedding the secret message
+  String embeddedText = steganograph.embedTextInText(coverText: coverText, secretMessage: secretMessage);
+  print("Embedded Text: $embeddedText");
+
+  // Extracting the secret message
+  String extractedMessage = steganograph.extractTextFromText(encodedText: embeddedText);
+  print("Extracted Message: $extractedMessage");
+
   //Embed text in an image
   final coverImageText = dImage.decodePng(File(path1).readAsBytesSync())!;
   String textInput = "my_secret_plant_name";
