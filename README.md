@@ -14,7 +14,7 @@ and the Flutter guide for
 # Flutter Steganograph
 
 ***
-Flutter Steganograph is a digital image encoding package that embeds a message (text or image) into a cover image using the least significant bit (LSB) technique with minimal alteration to the original cover image.
+Flutter Steganograph is a digital image encoding package that embeds a message (text or image) into a cover image/text using the least significant bit (LSB) technique with minimal alteration to the original cover image/text.
 
 ## Installation 🛸
 
@@ -22,7 +22,7 @@ Add `flutter_steganograph` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_steganograph: ^0.0.1
+  flutter_steganograph: ^0.1.1
 ```
 
 ## Usage 📦
@@ -31,6 +31,37 @@ Importing the Package
 
 ```dart
 import 'package:flutter_steganograph/flutter_steganograph.dart';
+```
+
+## Embed a secret text into a cover text ♟️
+
+Embeds a secret text inside a cover text using zero-width characters.
+Returns a string with the secret message embedded inside cover text, invisible to normal readers.
+```dart
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
+
+final steganograph = Steganograph();
+
+String embeddedText = steganograph.embedTextInText(
+    coverText: 'cover text sample', 
+    secretMessage: 'super secret text to hide',
+    );
+print(embeddedText);
+```
+
+## Extract the secret text from cover text ♖
+
+Extracts a text message embedded in a text using zero-width characters.
+Returns the extracted secret message. If no secret message is found, returns a message indicating this.
+```dart
+import 'package:flutter_steganograph/src/flutter_steganograph.dart';
+
+final steganograph = Steganograph();
+
+String secretText = steganograph.extractTextFromText(
+    encodedText: 'cover text sample',
+    );
+print(secretText);
 ```
 
 ## Embed a text into an image 🔩
@@ -54,7 +85,7 @@ final embeddedTextImage = steganograph.embedText(
 Image.memory(embeddedTextImage);
 ```
 
-## Extract a secret text from the encoded image 🔬
+## Extract the secret text from the encoded image 🔬
 
 Extracts a secret text string from an encoded image.
 Returns the extracted secret String
@@ -94,7 +125,7 @@ Uint8List embeddedImage = steganograph.embedImage(
 Image.memory(embeddedImage);
 ```
 
-## Extract secret Image from an encoded image 🧮
+## Extract the secret Image from an encoded image 🧮
 
 decode a secret image from the encoded image.
 Returns the embedded bytes -> `Uint8List` of secret image.
