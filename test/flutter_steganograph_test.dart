@@ -27,11 +27,11 @@ void main() {
       String coverText = "This is a cover text.";
       String secretMessage = "This is a much longer secret message than the cover text.";
 
-      String embeddedText = steganograph.embedTextInText(coverText, secretMessage);
+      String embeddedText = steganograph.embedTextInText(coverText: coverText, secretMessage: secretMessage);
 
       expect(embeddedText, isNot(equals(coverText)));
 
-      String extractedMessage = steganograph.extractTextFromText(embeddedText);
+      String extractedMessage = steganograph.extractTextFromText(encodedText: embeddedText);
 
       expect(extractedMessage, equals(secretMessage));
     });
@@ -39,7 +39,7 @@ void main() {
     test('Extract should fail if no secret message is present', () {
       String coverTextWithoutSecret = "This is just a normal text.";
 
-      String result = steganograph.extractTextFromText(coverTextWithoutSecret);
+      String result = steganograph.extractTextFromText(encodedText: coverTextWithoutSecret);
 
       expect(result, equals("No secret message found!"));
     });
